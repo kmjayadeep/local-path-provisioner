@@ -229,7 +229,6 @@ func (p *LocalPathProvisioner) Provision(opts pvController.ProvisionOptions) (*v
 	}
 
 	fs := v1.PersistentVolumeFilesystem
-	hostPathType := v1.HostPathDirectoryOrCreate
 
 	valueNode, ok := node.GetLabels()[KeyNode]
 	if !ok {
@@ -248,9 +247,8 @@ func (p *LocalPathProvisioner) Provision(opts pvController.ProvisionOptions) (*v
 				v1.ResourceName(v1.ResourceStorage): pvc.Spec.Resources.Requests[v1.ResourceName(v1.ResourceStorage)],
 			},
 			PersistentVolumeSource: v1.PersistentVolumeSource{
-				HostPath: &v1.HostPathVolumeSource{
+				Local: &v1.LocalVolumeSource{
 					Path: path,
-					Type: &hostPathType,
 				},
 			},
 			NodeAffinity: &v1.VolumeNodeAffinity{
@@ -307,11 +305,11 @@ func (p *LocalPathProvisioner) getPathAndNodeForPV(pv *v1.PersistentVolume) (pat
 		err = errors.Wrapf(err, "failed to delete volume %v", pv.Name)
 	}()
 
-	hostPath := pv.Spec.PersistentVolumeSource.HostPath
-	if hostPath == nil {
-		return "", "", fmt.Errorf("no HostPath set")
+	local := pv.Spec.PersistentVolumeSource.Local
+	if local == nil {
+		return "", "", fmt.Errorf("no Local set")
 	}
-	path = hostPath.Path
+	path = local.Path
 
 	nodeAffinity := pv.Spec.NodeAffinity
 	if nodeAffinity == nil {
