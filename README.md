@@ -1,6 +1,13 @@
 # Local Path Provisioner
 [![Build Status](https://drone-publish.rancher.io/api/badges/rancher/local-path-provisioner/status.svg)](https://drone-publish.rancher.io/rancher/local-path-provisioner)[![Go Report Card](https://goreportcard.com/badge/github.com/rancher/local-path-provisioner)](https://goreportcard.com/report/github.com/rancher/local-path-provisioner)
 
+Note: 
+This is a fork of <https://github.com/rancher/local-path-provisioner>
+with support for local path provisioning so that it can be backed up
+using velero restic
+
+docker image tag: kmjayadeep/local-path-provisioner:velero-support
+
 ## Overview
 
 Local Path Provisioner provides a way for the Kubernetes users to utilize the local storage in each node. Based on the user configuration, the Local Path Provisioner will create `hostPath` based persistent volume on the node automatically. It utilizes the features introduced by Kubernetes [Local Persistent Volume feature](https://kubernetes.io/blog/2018/04/13/local-persistent-volumes-beta/), but make it a simpler solution than the built-in `local` volume feature in Kubernetes.
